@@ -2,7 +2,7 @@ name: Daily Maritime Briefing
 
 on:
   schedule:
-    - cron: '0 11 * * *'   # 11:00 UTC = 11:00 Lisbon (winter) / 12:00 (summer WEST)
+    - cron: '0 7 * * *'    # 07:00 UTC = 07:00 Lisbon (winter) / 08:00 (summer WEST)
   workflow_dispatch:        # allow manual run from GitHub Actions tab
 
 permissions:
