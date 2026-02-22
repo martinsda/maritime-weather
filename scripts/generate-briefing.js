@@ -118,89 +118,109 @@ async function fetchTides() {
 // ─── Section: TODAY — HOURLY FORECAST ────────────────────────────────────────
 
 function buildHourlyTable(windyIconEu, om) {
-  // Build Windy lookup keyed by UTC hour
-  const windyByHour = {};
-  const isTestKey   = windyIconEu?.warning?.includes('shuffled');
-  const hasWindy    = windyIconEu?.ts?.length > 0;
+  const isTestKey = windyIconEu?.warning?.includes('shuffled');
+  const hasWindy  = windyIconEu?.ts?.length > 0;
 
-  if (hasWindy) {
-    windyIconEu.ts.forEach((ts, i) => {
-      const h = new Date(ts).getUTCHours();
-      windyByHour[h] = {
-        spd:  spdKt(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]),
-        dir:  dirDeg(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]),
-        gust: windyIconEu['gust-surface'][i] * 1.94384,
-      };
-    });
-  }
-
-  const srcTag    = isTestKey ? 'Windy/iconEu ⚠' : 'Windy/iconEu ✓';
-  const srcNote   = hasWindy
+  const windyNote = hasWindy
     ? (isTestKey
         ? 'Wind: **Windy API / iconEu** (3-hourly, ⚠ test key — values shuffled, not reliable)'
         : 'Wind: **Windy API / iconEu** (3-hourly ✓ production key)')
     : 'Wind: **Open-Meteo** (Windy key not configured)';
 
-  // Filter to today only
+  // Build Open-Meteo lookup keyed by local datetime string (YYYY-MM-DDTHH:MM)
+  const omByTime = {};
+  om.hourly.time.forEach((t, i) => {
+    omByTime[t] = {
+      temp: om.hourly.temperature_2m[i],
+      pp:   om.hourly.precipitation_probability[i],
+      rain: om.hourly.rain[i],
+      // fallback wind if Windy not available
+      spd:  om.hourly.wind_speed_10m[i],
+      dir:  om.hourly.wind_direction_10m[i],
+      gust: om.hourly.wind_gusts_10m[i],
+    };
+  });
+
   const todayStr = new Date().toISOString().slice(0, 10);
   const rows = [];
 
-  om.hourly.time.forEach((t, i) => {
-    if (!t.startsWith(todayStr)) return;
-    const h    = parseInt(t.slice(11, 13));
-    const temp = om.hourly.temperature_2m[i];
-    const pp   = om.hourly.precipitation_probability[i];
-    const rain = om.hourly.rain[i];
+  if (hasWindy) {
+    // Drive the table from Windy's 3-hourly timestamps
+    windyIconEu.ts.forEach((ts, i) => {
+      // Convert Windy UTC timestamp to Lisbon local time string for OM lookup
+      const utcDate  = new Date(ts);
+      const localStr = utcDate.toLocaleString('sv-SE', { timeZone: CONFIG.timezone })
+                               .replace(' ', 'T').slice(0, 16); // "YYYY-MM-DDTHH:MM"
+      const localDay = localStr.slice(0, 10);
+      if (localDay !== todayStr) return;
 
-    let spd, dir, gust, src;
-    if (hasWindy && windyByHour[h] !== undefined) {
-      ({ spd, dir, gust } = windyByHour[h]);
-      src = srcTag;
-    } else {
-      spd  = om.hourly.wind_speed_10m[i];
-      dir  = om.hourly.wind_direction_10m[i];
-      gust = om.hourly.wind_gusts_10m[i];
-      src  = 'Open-Meteo';
-    }
+      const spd  = spdKt(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
+      const dir  = dirDeg(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
+      const gust = windyIconEu['gust-surface'][i] * 1.94384;
+      const om3  = omByTime[localStr] || {};
 
-    rows.push({
-      time: t.slice(11, 16),
-      temp, pp, rain,
-      spd, dir, gust,
-      bf:  beaufort(spd),
-      dl:  dirLabel(dir),
-      src,
+      rows.push({
+        time: localStr.slice(11, 16),
+        temp: om3.temp ?? null,
+        pp:   om3.pp   ?? null,
+        rain: om3.rain ?? null,
+        spd, dir, gust,
+        bf:  beaufort(spd),
+        dl:  dirLabel(dir),
+      });
     });
-  });
+  } else {
+    // No Windy — fall back to Open-Meteo hourly for today
+    om.hourly.time.forEach((t, i) => {
+      if (!t.startsWith(todayStr)) return;
+      const spd  = om.hourly.wind_speed_10m[i];
+      const dir  = om.hourly.wind_direction_10m[i];
+      const gust = om.hourly.wind_gusts_10m[i];
+      rows.push({
+        time: t.slice(11, 16),
+        temp: om.hourly.temperature_2m[i],
+        pp:   om.hourly.precipitation_probability[i],
+        rain: om.hourly.rain[i],
+        spd, dir, gust,
+        bf:  beaufort(spd),
+        dl:  dirLabel(dir),
+      });
+    });
+  }
+
+  if (!rows.length) return `## TODAY — HOURLY FORECAST\n\n> ⚠ No data for today.\n`;
 
   // Bold the peak wind row
   const peakIdx = rows.reduce((b, r, i) => r.spd > rows[b].spd ? i : b, 0);
 
+  const fv = (v, suffix, dp = 1) => v != null ? v.toFixed(dp) + suffix : '—';
+
   const header = [
     `## TODAY — HOURLY FORECAST`,
     ``,
-    `> ${srcNote} · Temp / Precip / Rain: **Open-Meteo** (live)`,
+    `> ${windyNote} · Temp / Precip / Rain: **Open-Meteo** (live)`,
     ``,
-    `| Time  | Temp    | Wind Dir        | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) | Wind src         |`,
-    `|-------|---------|-----------------|-----------|-----------|------|----------|-----------|------------------|`,
+    `| Time  | Temp    | Wind Dir        | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) |`,
+    `|-------|---------|-----------------|-----------|-----------|------|----------|-----------|`,
   ];
 
   const tableRows = rows.map((r, i) => {
     const p = i === peakIdx;
     const b = s => p ? `**${s}**` : s;
-    return `| ${b(r.time)}  | ${b(r.temp.toFixed(1) + '°C')}  | ${b(String(Math.round(r.dir)).padStart(3) + '° ' + r.dl.padEnd(5))} | ${b(r.spd.toFixed(1) + 'kt')} | ${b(r.gust.toFixed(1) + 'kt')} | ${b('F' + r.bf)} | ${b(r.pp + '%')} | ${b(r.rain.toFixed(1) + 'mm')} | ${b(r.src)} |`;
+    return `| ${b(r.time)}  | ${b(fv(r.temp, '°C'))}  | ${b(String(Math.round(r.dir)).padStart(3) + '° ' + r.dl.padEnd(5))} | ${b(fv(r.spd, 'kt'))} | ${b(fv(r.gust, 'kt'))} | ${b('F' + r.bf)} | ${b(r.pp != null ? r.pp + '%' : '—')} | ${b(fv(r.rain, 'mm'))} |`;
   });
 
   const peak    = rows[peakIdx];
-  const minTemp = Math.min(...rows.map(r => r.temp)).toFixed(1);
-  const maxTemp = Math.max(...rows.map(r => r.temp)).toFixed(1);
-  const totalR  = rows.reduce((s, r) => s + r.rain, 0).toFixed(1);
+  const temps   = rows.map(r => r.temp).filter(t => t != null);
+  const minTemp = temps.length ? Math.min(...temps).toFixed(1) : '—';
+  const maxTemp = temps.length ? Math.max(...temps).toFixed(1) : '—';
+  const totalR  = rows.reduce((s, r) => s + (r.rain ?? 0), 0).toFixed(1);
   const dirEvo  = [...new Set(rows.map(r => r.dl))].join(' → ');
 
   const summary = [
     ``,
-    `**Wind summary**: Peak ${peak.spd.toFixed(1)}kt from ${Math.round(peak.dir)}° ${peak.dl} ` +
-    `at ${peak.time}, gusting ${peak.gust.toFixed(1)}kt (F${peak.bf}). ` +
+    `**Wind summary**: Peak ${fv(peak.spd, 'kt')} from ${Math.round(peak.dir)}° ${peak.dl} ` +
+    `at ${peak.time}, gusting ${fv(peak.gust, 'kt')} (F${peak.bf}). ` +
     `Direction: ${dirEvo}. ` +
     (parseFloat(totalR) > 0 ? `Total rain: ${totalR}mm. ` : `Zero precipitation. `) +
     `Temperature: **${minTemp}°C** (min) → **${maxTemp}°C** (max).`,
