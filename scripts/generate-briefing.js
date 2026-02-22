@@ -524,9 +524,12 @@ function buildEmailHtml(date, hourlyMd, tidalMd, multiMd) {
   ].join('<hr style="border:none;border-top:1px solid #e8edf2;margin:16px 0;">');
 
   return `<div style="${base}max-width:680px;margin:0 auto;">
-  <div style="background:#0a3d62;color:white;padding:18px 22px;border-radius:8px 8px 0 0;">
-    <div style="font-size:17px;font-weight:700;">⚓ Maritime Weather Briefing</div>
-    <div style="font-size:11px;opacity:0.75;margin-top:3px;">${CONFIG.route} &nbsp;·&nbsp; ${date} &nbsp;·&nbsp; ${CONFIG.lat}°N, ${Math.abs(CONFIG.lon)}°W</div>
+  <div style="background:#0a3d62;color:white;padding:18px 22px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;">
+    <div>
+      <div style="font-size:17px;font-weight:700;">⚓ Maritime Weather Briefing</div>
+      <div style="font-size:11px;opacity:0.75;margin-top:3px;">${CONFIG.route} &nbsp;·&nbsp; ${date} &nbsp;·&nbsp; ${CONFIG.lat}°N, ${Math.abs(CONFIG.lon)}°W</div>
+    </div>
+    <a href="https://martinsda.github.io/maritime-weather/" style="font-size:11px;color:white;background:rgba(255,255,255,0.15);padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;">View online →</a>
   </div>
   <div style="background:white;padding:20px 22px;border-radius:0 0 8px 8px;border:1px solid #dde4ed;">
     ${body}
@@ -596,6 +599,7 @@ async function main() {
     `**Date**: ${dateLabel}`,
     `**Route**: ${CONFIG.route}`,
     `**Base coordinates**: ${CONFIG.lat}°N, ${Math.abs(CONFIG.lon)}°W | Elevation: ${CONFIG.elev}m`,
+    `**Web**: [martinsda.github.io/maritime-weather](https://martinsda.github.io/maritime-weather/)`,
     ``,
     `---`,
     ``,

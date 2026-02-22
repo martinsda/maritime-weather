@@ -2,6 +2,7 @@
 **Date**: 22 February 2026
 **Route**: Lisbon → Cascais
 **Base coordinates**: 38.682°N, 9.219°W | Elevation: 16m
+**Web**: [martinsda.github.io/maritime-weather](https://martinsda.github.io/maritime-weather/)
 
 ---
 
@@ -11,11 +12,10 @@
 
 | Time  | Temp    | Wind Dir        | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) |
 |-------|---------|-----------------|-----------|-----------|------|----------|-----------|
-| 15:00  | 20.5°C  | 178° S     | 4.1kt | 13.7kt | F2 | 0% | 0.0mm |
-| **18:00**  | **19.4°C**  | ** 42° NE   ** | **5.9kt** | **5.1kt** | **F2** | **0%** | **0.0mm** |
-| 21:00  | 15.8°C  | 237° WSW   | 3.9kt | 7.4kt | F1 | 0% | 0.0mm |
+| **18:00**  | **19.8°C**  | **179° S    ** | **5.3kt** | **4.1kt** | **F2** | **0%** | **0.0mm** |
+| 21:00  | 15.7°C  | 132° SE    | 2.0kt | 9.1kt | F1 | 0% | 0.0mm |
 
-**Wind summary**: Peak 5.9kt from 42° NE at 18:00, gusting 5.1kt (F2). Direction: S → NE → WSW. Zero precipitation. Temperature: **15.8°C** (min) → **20.5°C** (max).
+**Wind summary**: Peak 5.3kt from 179° S at 18:00, gusting 4.1kt (F2). Direction: S → SE. Zero precipitation. Temperature: **15.7°C** (min) → **19.8°C** (max).
 
 ---
 
@@ -48,8 +48,8 @@ Tidal range: 2.54m
 
 | Date          | Condition             | Max°C | Min°C | Rain % | Precip (mm) | Wind Max (kt) | Gust Max (kt) | Dom. Dir      |
 |---------------|-----------------------|-------|-------|--------|-------------|---------------|---------------|---------------|
-| Sun 22 Feb    | Mainly clear          | 20.7 | 10.5 | 0% | 0.0 | 5.9 | 14.2 | 49° NE |
-| Mon 23 Feb    | Overcast              | 20.7 | 10.7 | 0% | 0.0 | 4.4 | 10.7 | 93° E |
+| Sun 22 Feb    | Partly cloudy         | 20.9 | 10.5 | 0% | 0.0 | 5.9 | 14.2 | 48° NE |
+| Mon 23 Feb    | Overcast              | 20.8 | 10.6 | 0% | 0.0 | 4.3 | 10.5 | 83° E |
 | Tue 24 Feb    | Overcast              | 18.0 | 12.6 | 16% | 0.0 | 11.3 | 23.7 | 199° SSW |
 | **Wed 25 Feb   ** | **⚡ Thunderstorm       ** | **17.7** | **12.2** | **60%** | **2.1** | **7.3** | **15.9** | **288° WNW** |
 | Thu 26 Feb    | Overcast              | 19.0 | 10.8 | 2% | 0.0 | 6.2 | 12.8 | 359° N |
@@ -71,4 +71,4 @@ Tidal range: 2.54m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Stormglass.io | Tidal extremes | `api.stormglass.io/v2/tide/extremes/point` |
 
-*Generated: 2026-02-22T16:28:38.241Z UTC*
+*Generated: 2026-02-22T21:08:22.677Z UTC*
