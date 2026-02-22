@@ -11,32 +11,32 @@
 
 | Time  | Temp    | Wind Dir        | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) | Wind src         |
 |-------|---------|-----------------|-----------|-----------|------|----------|-----------|------------------|
-| 00:00  | 13.4°C  |  56° NE    | 8.1kt | 15.6kt | F3 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 00:00  | 13.4°C  |  58° ENE   | 4.6kt | 15.6kt | F2 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 01:00  | 12.9°C  |  40° NE    | 3.0kt | 7.2kt | F1 | 0% | 0.0mm | Open-Meteo |
 | 02:00  | 12.4°C  |  40° NE    | 3.0kt | 7.4kt | F1 | 0% | 0.0mm | Open-Meteo |
-| 03:00  | 12.0°C  |   4° N     | 3.4kt | 11.8kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 03:00  | 12.0°C  | 132° SE    | 3.4kt | 12.4kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 04:00  | 11.6°C  |  43° NE    | 3.4kt | 8.4kt | F1 | 0% | 0.0mm | Open-Meteo |
 | 05:00  | 11.3°C  |  43° NE    | 3.4kt | 8.7kt | F1 | 0% | 0.0mm | Open-Meteo |
-| 06:00  | 10.9°C  | 241° WSW   | 3.7kt | 5.1kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 06:00  | 10.9°C  | 288° WNW   | 2.2kt | 9.0kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 07:00  | 10.6°C  |  49° NE    | 3.6kt | 9.3kt | F1 | 0% | 0.0mm | Open-Meteo |
 | 08:00  | 10.5°C  |  47° NE    | 3.7kt | 9.1kt | F1 | 0% | 0.0mm | Open-Meteo |
-| **09:00**  | **12.4°C**  | **162° SSE  ** | **12.7kt** | **5.5kt** | **F4** | **0%** | **0.0mm** | **Windy/iconEu ⚠** |
+| 09:00  | 12.4°C  |  61° ENE   | 0.6kt | 5.4kt | F0 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 10:00  | 14.8°C  |  54° NE    | 4.6kt | 11.5kt | F2 | 0% | 0.0mm | Open-Meteo |
 | 11:00  | 16.5°C  |  55° NE    | 5.7kt | 13.4kt | F2 | 0% | 0.0mm | Open-Meteo |
-| 12:00  | 17.9°C  |   3° N     | 2.1kt | 7.4kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| **12:00**  | **17.9°C**  | **150° SSE  ** | **6.8kt** | **7.8kt** | **F2** | **0%** | **0.0mm** | **Windy/iconEu ⚠** |
 | 13:00  | 19.1°C  |  60° ENE   | 5.4kt | 13.6kt | F2 | 0% | 0.0mm | Open-Meteo |
 | 14:00  | 19.9°C  |  61° ENE   | 4.9kt | 12.1kt | F2 | 0% | 0.0mm | Open-Meteo |
-| 15:00  | 20.5°C  |   3° N     | 4.4kt | 23.8kt | F2 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 15:00  | 20.5°C  | 119° ESE   | 0.3kt | 4.2kt | F0 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 16:00  | 20.7°C  |  82° E     | 2.9kt | 10.1kt | F1 | 0% | 0.0mm | Open-Meteo |
 | 17:00  | 20.4°C  | 108° ESE   | 1.8kt | 6.0kt | F1 | 0% | 0.0mm | Open-Meteo |
-| 18:00  | 19.4°C  | 136° SE    | 2.9kt | 9.8kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 18:00  | 19.4°C  | 123° ESE   | 3.9kt | 4.1kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 19:00  | 17.9°C  | 207° SSW   | 0.4kt | 2.7kt | F0 | 0% | 0.0mm | Open-Meteo |
 | 20:00  | 17.2°C  | 320° NW    | 1.5kt | 2.7kt | F1 | 0% | 0.0mm | Open-Meteo |
-| 21:00  | 15.8°C  |  83° E     | 2.6kt | 9.1kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
+| 21:00  | 15.8°C  | 176° S     | 2.4kt | 5.3kt | F1 | 0% | 0.0mm | Windy/iconEu ⚠ |
 | 22:00  | 14.8°C  | 355° N     | 2.1kt | 4.9kt | F1 | 0% | 0.0mm | Open-Meteo |
 | 23:00  | 14.3°C  |   9° N     | 2.4kt | 5.2kt | F1 | 0% | 0.0mm | Open-Meteo |
 
-**Wind summary**: Peak 12.7kt from 162° SSE at 09:00, gusting 5.5kt (F4). Direction: NE → N → WSW → SSE → ENE → E → ESE → SE → SSW → NW. Zero precipitation. Temperature: **10.5°C** (min) → **20.7°C** (max).
+**Wind summary**: Peak 6.8kt from 150° SSE at 12:00, gusting 7.8kt (F2). Direction: ENE → NE → SE → WNW → SSE → ESE → E → SSW → NW → S → N. Zero precipitation. Temperature: **10.5°C** (min) → **20.7°C** (max).
 
 ---
 
@@ -88,4 +88,4 @@ Tidal range: 2.5m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Stormglass.io | Tidal extremes | `api.stormglass.io/v2/tide/extremes/point` |
 
-*Generated: 2026-02-22T15:57:17.359Z UTC*
+*Generated: 2026-02-22T16:14:54.679Z UTC*
