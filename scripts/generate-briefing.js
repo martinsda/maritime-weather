@@ -211,13 +211,18 @@ function buildHourlyTable(windyIconEu, om) {
 
 // ─── Section: TIDES ───────────────────────────────────────────────────────────
 
+// Stormglass returns heights above MSL. Portuguese charts and Porto de Lisboa
+// use Zero Hidrográfico (ZH), which sits 2.08m below MSL at Cascais.
+// Adding this offset converts Stormglass values to the ZH datum.
+const ZH_OFFSET = 2.08;
+
 function buildTidalSection(tidesData) {
   const lines = [`## TIDES — ${CONFIG.port}`, ``];
 
   if (!tidesData?.data?.length) {
     lines.push(
       `> ⚠ Tidal data unavailable. Add \`STORMGLASS_API_KEY\` to GitHub Secrets for automated tides.`,
-      `> Cross-check: [Tides4Fishing Lisboa](https://tides4fishing.com/pt/lisboa/lisboa) · [Porto de Lisboa](https://www.portodelisboa.pt/en/tides)`,
+      `> Cross-check: [Tides4Fishing Lisboa](https://tides4fishing.com/pt/lisboa/lisboa) · [Porto de Lisboa](https://www.portodelisboa.pt/mares)`,
       ``,
       `\`\`\``,
       `HW1: --:-- — ?.?m`,
@@ -232,13 +237,20 @@ function buildTidalSection(tidesData) {
   const highs = tides.filter(t => t.type === 'high');
   const lows  = tides.filter(t => t.type === 'low');
   const fmt   = ts => new Date(ts).toTimeString().slice(0, 5);
+  const zh    = h  => (h + ZH_OFFSET).toFixed(2);
+
+  lines.push(
+    `> Heights above **Zero Hidrográfico (ZH)** — same datum as Porto de Lisboa and Portuguese charts.`,
+    `> Stormglass model prediction: verify against [Porto de Lisboa](https://www.portodelisboa.pt/mares) for critical passages.`,
+    ``,
+  );
 
   lines.push('```');
-  highs.forEach((h, i) => lines.push(`HW${i + 1}: ${fmt(h.time)} — ${h.height.toFixed(1)}m`));
-  lows.forEach(l  => lines.push(`LW:  ${fmt(l.time)} — ${l.height.toFixed(1)}m`));
+  highs.forEach((h, i) => lines.push(`HW${i + 1}: ${fmt(h.time)} UTC — ${zh(h.height)}m (ZH)`));
+  lows.forEach(l  => lines.push(`LW:  ${fmt(l.time)} UTC — ${zh(l.height)}m (ZH)`));
 
   if (highs.length && lows.length) {
-    const range = Math.abs(highs[0].height - lows[0].height).toFixed(1);
+    const range = Math.abs(highs[0].height - lows[0].height).toFixed(2);
     lines.push(`Tidal range: ${range}m`);
   }
   lines.push('```', ``);
