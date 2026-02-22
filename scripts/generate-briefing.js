@@ -504,19 +504,32 @@ function buildEmailHtml(date, hourlyMd, tidalMd, multiMd) {
 }
 
 async function sendEmail(date, html) {
+  console.log(`  SMTP config: host=${CONFIG.smtpHost} port=${CONFIG.smtpPort} user=${CONFIG.smtpUser} to=${CONFIG.emailTo}`);
+
   const transporter = nodemailer.createTransport({
     host:   CONFIG.smtpHost,
     port:   CONFIG.smtpPort,
     secure: CONFIG.smtpPort === 465,
     auth:   { user: CONFIG.smtpUser, pass: CONFIG.smtpPass },
+    debug:  true,
+    logger: true,
   });
-  await transporter.sendMail({
+
+  await transporter.verify();
+  console.log('  SMTP connection verified ✓');
+
+  const info = await transporter.sendMail({
     from:    `"Maritime Briefing ⚓" <${CONFIG.smtpUser}>`,
     to:      CONFIG.emailTo,
     subject: `⚓ Maritime Briefing — ${date}`,
     html,
   });
+
   console.log(`✓ Email sent → ${CONFIG.emailTo}`);
+  console.log(`  Message ID : ${info.messageId}`);
+  console.log(`  Response   : ${info.response}`);
+  console.log(`  Accepted   : ${info.accepted}`);
+  console.log(`  Rejected   : ${info.rejected}`);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
