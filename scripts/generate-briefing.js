@@ -241,7 +241,8 @@ function buildTidalSection(tidesData) {
 
   lines.push(
     `> Heights above **Zero Hidrográfico (ZH)** — same datum as Porto de Lisboa and Portuguese charts.`,
-    `> Stormglass model prediction: verify against [Porto de Lisboa](https://www.portodelisboa.pt/mares) for critical passages.`,
+    `> Stormglass model prediction (+2.08 m MSL→ZH offset applied). Always verify against the official source before critical passages.`,
+    `> **Official tide table → [Porto de Lisboa — Marés](https://www.portodelisboa.pt/mares)**`,
     ``,
   );
 
