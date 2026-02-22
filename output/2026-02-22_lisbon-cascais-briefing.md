@@ -12,10 +12,10 @@
 
 | Time  | Temp    | Wind Dir        | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) |
 |-------|---------|-----------------|-----------|-----------|------|----------|-----------|
-| **18:00**  | **19.8°C**  | **179° S    ** | **5.3kt** | **4.1kt** | **F2** | **0%** | **0.0mm** |
-| 21:00  | 15.7°C  | 132° SE    | 2.0kt | 9.1kt | F1 | 0% | 0.0mm |
+| 18:00  | 19.8°C  |  26° NNE   | 2.5kt | 9.0kt | F1 | 0% | 0.0mm |
+| **21:00**  | **15.7°C**  | **315° NW   ** | **3.0kt** | **7.2kt** | **F1** | **0%** | **0.0mm** |
 
-**Wind summary**: Peak 5.3kt from 179° S at 18:00, gusting 4.1kt (F2). Direction: S → SE. Zero precipitation. Temperature: **15.7°C** (min) → **19.8°C** (max).
+**Wind summary**: Peak 3.0kt from 315° NW at 21:00, gusting 7.2kt (F1). Direction: NNE → NW. Zero precipitation. Temperature: **15.7°C** (min) → **19.8°C** (max).
 
 ---
 
@@ -50,13 +50,13 @@ Tidal range: 2.54m
 |---------------|-----------------------|-------|-------|--------|-------------|---------------|---------------|---------------|
 | Sun 22 Feb    | Partly cloudy         | 20.9 | 10.5 | 0% | 0.0 | 5.9 | 14.2 | 48° NE |
 | Mon 23 Feb    | Overcast              | 20.8 | 10.6 | 0% | 0.0 | 4.3 | 10.5 | 83° E |
-| Tue 24 Feb    | Overcast              | 18.0 | 12.6 | 16% | 0.0 | 11.3 | 23.7 | 199° SSW |
-| **Wed 25 Feb   ** | **⚡ Thunderstorm       ** | **17.7** | **12.2** | **60%** | **2.1** | **7.3** | **15.9** | **288° WNW** |
-| Thu 26 Feb    | Overcast              | 19.0 | 10.8 | 2% | 0.0 | 6.2 | 12.8 | 359° N |
-| Fri 27 Feb    | 🌧 Light rain         | 15.4 | 10.3 | 30% | 3.0 | 16.2 | 33.8 | 355° N |
+| Tue 24 Feb    | Overcast              | 18.0 | 12.6 | 4% | 0.0 | 11.3 | 23.7 | 199° SSW |
+| **Wed 25 Feb   ** | **⚡ Thunderstorm       ** | **17.7** | **12.2** | **53%** | **2.1** | **7.3** | **15.9** | **288° WNW** |
+| Thu 26 Feb    | Overcast              | 19.0 | 10.8 | 3% | 0.0 | 6.2 | 12.8 | 359° N |
+| Fri 27 Feb    | 🌧 Light rain         | 15.4 | 10.3 | 25% | 3.0 | 16.2 | 33.8 | 355° N |
 | Sat 28 Feb    | Overcast              | 14.2 | 10.5 | 13% | 0.0 | 13.3 | 27.2 | 354° N |
 
-⚡ **Wed 25 Feb — DO NOT SAIL**: Thunderstorm (WMO 95), 60% probability.
+⚡ **Wed 25 Feb — DO NOT SAIL**: Thunderstorm (WMO 95), 53% probability.
 
 **Week reading**: 5 of 7 days settled (rain <20%, wind <15kt). Peak gust this week: **33.8kt** on Fri 27 Feb. Confidence high D+0–D+2, indicative only beyond 72 hrs.
 
@@ -71,4 +71,4 @@ Tidal range: 2.54m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Stormglass.io | Tidal extremes | `api.stormglass.io/v2/tide/extremes/point` |
 
-*Generated: 2026-02-22T21:08:22.677Z UTC*
+*Generated: 2026-02-22T21:18:07.431Z UTC*
