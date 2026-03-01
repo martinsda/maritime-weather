@@ -13,13 +13,13 @@
 
 | Time  | Temp    | ICON-EU Dir     | ICON (kt) | Gust (kt) | BFT  | ECMWF Dir | ECMWF (kt) | Δkt   | Precip % | Rain (mm) |
 |-------|---------|-----------------|-----------|-----------|------|-----------|------------|-------|----------|-----------|
-| 09:00  | 10.1°C  | 153° SSE   | 4.2kt | 12.0kt | F2 | ENE   | 3.1kt | -1.1 | 0% | 0.0mm |
-| **12:00**  | **15.3°C**  | **180° S    ** | **15.0kt** | **20.0kt** | **F4** | **ESE  ** | **1.8kt** | **⚠ -13.2** | **0%** | **0.0mm** |
-| 15:00  | 16.3°C  | 254° WSW   | 5.2kt | 19.5kt | F2 | SSW   | 4.7kt | -0.5 | 0% | 0.0mm |
-| 18:00  | 14.4°C  | 216° SW    | 9.1kt | 18.9kt | F3 | WSW   | 3.1kt | ⚠ -6.0 | 0% | 0.0mm |
-| 21:00  | 12.1°C  | 360° N     | 4.9kt | 13.0kt | F2 | WNW   | 2.5kt | -2.4 | 0% | 0.0mm |
+| 09:00  | 10.1°C  | 359° N     | 3.2kt | 10.5kt | F1 | ENE   | 3.1kt | -0.1 | 0% | 0.0mm |
+| **12:00**  | **15.3°C**  | **160° SSE  ** | **9.7kt** | **16.4kt** | **F3** | **ESE  ** | **1.8kt** | **⚠ -7.9** | **0%** | **0.0mm** |
+| 15:00  | 16.3°C  |  88° E     | 1.8kt | 23.0kt | F1 | SSW   | 4.7kt | +2.9 | 0% | 0.0mm |
+| 18:00  | 14.4°C  | 190° S     | 3.8kt | 9.0kt | F1 | WSW   | 3.1kt | -0.7 | 0% | 0.0mm |
+| 21:00  | 12.1°C  | 295° WNW   | 7.5kt | 19.5kt | F3 | WNW   | 2.5kt | ⚠ -5.0 | 0% | 0.0mm |
 
-**Wind summary**: Peak 15.0kt from 180° S at 12:00, gusting 20.0kt (F4). Direction: SSE → S → WSW → SW → N. Max model spread: **13.2kt** (ICON-EU vs ECMWF — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **10.1°C** (min) → **16.3°C** (max).
+**Wind summary**: Peak 9.7kt from 160° SSE at 12:00, gusting 16.4kt (F3). Direction: N → SSE → E → S → WNW. Max model spread: **7.9kt** (ICON-EU vs ECMWF — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **10.1°C** (min) → **16.3°C** (max).
 
 ---
 
@@ -37,14 +37,16 @@ LW:  19:26 UTC — 0.90m (ZH)
 Tidal range: 2.49m
 ```
 
-| Time          | Stream                | Passage note                           |
-|---------------|-----------------------|----------------------------------------|
-| 22:57 | Flood at peak         | Assists entry to estuary               |
-| 00:57           | HW slack              | Cross bars and shallows — timing key   |
-| 02:57 | Ebb building          | Assists exit from estuary → sea        |
-| 05:17 | Ebb at peak           | Fast exit — bar active, wind/tide risk |
-| 07:17           | LW slack              | Calmest bar crossing window            |
-| 13:29          | HW2 — flood building  | Comfortable return bar entry           |
+| Time (UTC)    | Stream at departure/return    | Passage note                                     |
+|---------------|-------------------------------|--------------------------------------------------|
+| 14:00 (dep)  | slack ebb                     | Near-slack (13:29→19:26) — negligible effect |
+| 17:00 (ret)  | strong ebb                    | strong ebb — adverse for return; plan for extra time |
+| 00:57 UTC | HW slack (3.28m ZH) | Calmest bar crossing window |
+| 07:17 UTC | LW slack (0.80m ZH) | Calmest bar crossing window |
+| 13:29 UTC | HW slack (3.14m ZH) | Calmest bar crossing window |
+| 19:26 UTC | LW slack (0.90m ZH) | Calmest bar crossing window |
+
+> **Passage window**: ✓ Depart 14:00 on slack ebb — seaward/Cascais favoured. Return 17:00 on strong ebb — allow extra time against ebb.
 
 ---
 
@@ -73,4 +75,4 @@ Tidal range: 2.49m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Stormglass.io | Tidal extremes | `api.stormglass.io/v2/tide/extremes/point` |
 
-*Generated: 2026-03-01T10:19:56.017Z UTC*
+*Generated: 2026-03-01T10:35:17.473Z UTC*
