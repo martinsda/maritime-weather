@@ -29,6 +29,8 @@ const CONFIG = {
   timezone: 'Europe/Lisbon',
   route:    'Lisbon → Cascais',
   port:     'Lisbon / Tagus Bar',
+  depHour:  14,   // typical departure (local time)
+  retHour:  17,   // typical return (local time)
   windyKey:        process.env.WINDY_API_KEY       || '',
   stormglassKey:   process.env.STORMGLASS_API_KEY  || '',
   smtpHost:        process.env.SMTP_HOST           || '',
@@ -313,32 +315,89 @@ function buildTidalSection(tidesData) {
   }
   lines.push('```', ``);
 
-  // Tidal stream table (computed relative to first HW)
-  if (highs.length) {
-    const hwMs   = new Date(highs[0].time).getTime();
-    const lwMs   = lows.length ? new Date(lows[0].time).getTime() : null;
-    const hw2Ms  = highs.length > 1 ? new Date(highs[1].time).getTime() : null;
-    const toHHMM = ms => new Date(ms).toTimeString().slice(0, 5);
+  // Convert tide event timestamps to local decimal hours for arithmetic
+  const toLocalDecHour = ts => {
+    const s = new Date(ts).toLocaleString('sv-SE', { timeZone: CONFIG.timezone }); // "YYYY-MM-DD HH:MM:SS"
+    return parseInt(s.slice(11, 13)) + parseInt(s.slice(14, 16)) / 60;
+  };
 
-    lines.push(
-      `| Time          | Stream                | Passage note                           |`,
-      `|---------------|-----------------------|----------------------------------------|`,
-      `| ${toHHMM(hwMs - 7200000)} | Flood at peak         | Assists entry to estuary               |`,
-      `| ${toHHMM(hwMs)}           | HW slack              | Cross bars and shallows — timing key   |`,
-      `| ${toHHMM(hwMs + 7200000)} | Ebb building          | Assists exit from estuary → sea        |`,
-    );
-    if (lwMs) {
-      lines.push(
-        `| ${toHHMM(lwMs - 7200000)} | Ebb at peak           | Fast exit — bar active, wind/tide risk |`,
-        `| ${toHHMM(lwMs)}           | LW slack              | Calmest bar crossing window            |`,
-      );
+  const events = tides.map(t => ({
+    type:      t.type,
+    timeStr:   fmt(t.time),
+    localHour: toLocalDecHour(t.time),
+    height:    t.height + ZH_OFFSET,
+  })).sort((a, b) => a.localHour - b.localHour);
+
+  // Determine tidal stream phase and relative rate at a given local decimal hour.
+  // Rate uses a sine curve: 0 at slack (HW/LW), 1 at mid-cycle peak.
+  function streamAt(hour) {
+    let prev = null, next = null;
+    for (const e of events) {
+      if (e.localHour <= hour) prev = e;
+      else if (!next) next = e;
     }
-    if (hw2Ms) {
-      lines.push(
-        `| ${toHHMM(hw2Ms)}          | HW2 — flood building  | Comfortable return bar entry           |`,
-      );
-    }
+    if (!prev || !next) return null;
+    const isEbb     = prev.type === 'high'; // after HW = ebb; after LW = flood
+    const cycleHrs  = next.localHour - prev.localHour;
+    const elapsed   = hour - prev.localHour;
+    const relRate   = Math.sin((elapsed / cycleHrs) * Math.PI); // 0→1→0
+    const rateLabel = relRate < 0.35 ? 'slack' : relRate < 0.70 ? 'moderate' : 'strong';
+    return { phase: isEbb ? 'ebb' : 'flood', relRate, rateLabel, prev, next };
   }
+
+  // Ebb  = water flows seaward  → favorable for OUTBOUND (Cascais)
+  // Flood = water flows inward  → favorable for INBOUND  (Lisbon / upriver)
+  function passageNote(stream, leg) {
+    if (!stream) return '—';
+    const { phase, rateLabel, prev, next } = stream;
+    const outFav  = phase === 'ebb';   // ebb helps outbound
+    const inFav   = phase === 'flood'; // flood helps inbound
+    const slack   = rateLabel === 'slack';
+
+    if (slack) return `Near-slack (${prev.timeStr}→${next.timeStr}) — negligible effect`;
+
+    if (leg === 'dep') {
+      // Outbound Lisbon → direction depends on stream
+      const dir = outFav ? 'Cascais (seaward)' : 'upriver';
+      return outFav
+        ? `${rateLabel} ebb — favorable seaward (Cascais)`
+        : `${rateLabel} flood — favorable upriver; adverse for Cascais`;
+    }
+    if (leg === 'ret') {
+      return inFav
+        ? `${rateLabel} flood — favorable return to Lisbon`
+        : `${rateLabel} ebb — adverse for return; plan for extra time`;
+    }
+    return '—';
+  }
+
+  const dep = streamAt(CONFIG.depHour);
+  const ret = streamAt(CONFIG.retHour);
+
+  // Slack water windows useful for bar crossings
+  const slackRows = events.map(e =>
+    `| ${e.timeStr} UTC | ${e.type === 'high' ? 'HW' : 'LW'} slack (${e.height.toFixed(2)}m ZH) | Calmest bar crossing window |`
+  );
+
+  lines.push(
+    `| Time (UTC)    | Stream at departure/return    | Passage note                                     |`,
+    `|---------------|-------------------------------|--------------------------------------------------|`,
+    `| ${String(CONFIG.depHour).padStart(2,'0')}:00 (dep)  | ${dep ? (dep.rateLabel + ' ' + dep.phase).padEnd(29) : '—'.padEnd(29)} | ${passageNote(dep, 'dep')} |`,
+    `| ${String(CONFIG.retHour).padStart(2,'0')}:00 (ret)  | ${ret ? (ret.rateLabel + ' ' + ret.phase).padEnd(29) : '—'.padEnd(29)} | ${passageNote(ret, 'ret')} |`,
+    ...slackRows,
+  );
+
+  // Overall recommendation
+  const depPhase = dep?.phase;
+  const retPhase = ret?.phase;
+  const bothAdverse = depPhase === 'flood' && retPhase === 'ebb';
+  const rec = bothAdverse
+    ? `⚠ Both legs adverse today — depart at HW slack (${events.find(e => e.type === 'high')?.timeStr ?? '—'} UTC) to minimise adverse stream.`
+    : depPhase === 'ebb'
+      ? `✓ Depart ${CONFIG.depHour}:00 on ${dep.rateLabel} ebb — seaward/Cascais favoured. Return ${CONFIG.retHour}:00 on ${ret?.rateLabel ?? '—'} ${ret?.phase ?? '—'}${ret?.phase === 'flood' ? ' — Lisbon return favoured' : ' — allow extra time against ebb'}.`
+      : `✓ Depart ${CONFIG.depHour}:00 on ${dep?.rateLabel ?? '—'} flood — upriver favoured. Return ${CONFIG.retHour}:00 on ${ret?.rateLabel ?? '—'} ${ret?.phase ?? '—'}${ret?.phase === 'ebb' ? ' — seaward return favoured' : ' — allow extra time against flood'}.`;
+
+  lines.push(``, `> **Passage window**: ${rec}`);
 
   return lines.join('\n');
 }
