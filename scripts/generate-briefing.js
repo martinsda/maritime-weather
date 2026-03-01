@@ -1,6 +1,6 @@
 /**
  * Maritime Weather Briefing — Auto-generator
- * Runs daily via GitHub Actions at 11:00 UTC
+ * Runs daily via GitHub Actions at 07:00 UTC
  *
  * Sources:
  *   Wind / Waves / Pressure  → Windy API (iconEu + gfsWave)
@@ -495,7 +495,7 @@ function buildPageHtml(date, hourlyMd, tidalMd, multiMd, reportFilename) {
     <h1>⚓ Maritime Weather Briefing</h1>
     <p>${CONFIG.route} &nbsp;·&nbsp; ${date} &nbsp;·&nbsp; ${CONFIG.lat}°N, ${Math.abs(CONFIG.lon)}°W</p>
   </div>
-  <span class="badge">Auto-generated · 11:00 UTC daily</span>
+  <span class="badge">Generated ${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC</span>
 </header>
 
 <main>
@@ -558,7 +558,7 @@ function buildEmailHtml(date, hourlyMd, tidalMd, multiMd) {
   <div style="background:white;padding:20px 22px;border-radius:0 0 8px 8px;border:1px solid #dde4ed;">
     ${body}
     <hr style="border:none;border-top:1px solid #e8edf2;margin:20px 0 10px;">
-    <p style="font-size:10px;color:#aaa;">Auto-generated daily at 11:00 UTC · maritime-weather skill · Windy API + Open-Meteo · Reply to unsubscribe.</p>
+    <p style="font-size:10px;color:#aaa;">Generated ${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC · maritime-weather skill · Windy API + Open-Meteo · Reply to unsubscribe.</p>
   </div>
 </div>`;
 }
