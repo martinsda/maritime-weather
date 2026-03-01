@@ -9,17 +9,17 @@
 ## TODAY — HOURLY FORECAST
 
 > ICON-EU: **Windy API** (3-hourly, ⚠ test key — values shuffled, not reliable) · Temp / Precip / Rain: **Open-Meteo** (live)
-> Δkt = GFS minus ICON-EU — divergence ⚠ >5kt signals low forecast confidence.
+> Δkt = ECMWF minus ICON-EU — divergence ⚠ >5kt signals low forecast confidence.
 
-| Time  | Temp    | ICON-EU Dir     | ICON (kt) | Gust (kt) | BFT  | GFS Dir  | GFS (kt) | Δkt   | Precip % | Rain (mm) |
-|-------|---------|-----------------|-----------|-----------|------|----------|----------|-------|----------|-----------|
-| 09:00  | 10.1°C  |  52° NE    | 1.0kt | 4.5kt | F1 | S     | 3.0kt | +2.0 | 0% | 0.0mm |
-| **12:00**  | **15.3°C**  | **171° S    ** | **9.5kt** | **21.1kt** | **F3** | **S    ** | **17.5kt** | **⚠ +7.9** | **0%** | **0.0mm** |
-| 15:00  | 16.3°C  |  30° NNE   | 3.8kt | 16.3kt | F1 | S     | 6.8kt | +2.9 | 0% | 0.0mm |
-| 18:00  | 14.4°C  | 197° SSW   | 4.9kt | 19.7kt | F2 | SSE   | 3.3kt | -1.6 | 0% | 0.0mm |
-| 21:00  | 12.1°C  | 278° W     | 0.4kt | 15.3kt | F0 | S     | 6.8kt | ⚠ +6.4 | 0% | 0.0mm |
+| Time  | Temp    | ICON-EU Dir     | ICON (kt) | Gust (kt) | BFT  | ECMWF Dir | ECMWF (kt) | Δkt   | Precip % | Rain (mm) |
+|-------|---------|-----------------|-----------|-----------|------|-----------|------------|-------|----------|-----------|
+| 09:00  | 10.1°C  | 153° SSE   | 4.2kt | 12.0kt | F2 | ENE   | 3.1kt | -1.1 | 0% | 0.0mm |
+| **12:00**  | **15.3°C**  | **180° S    ** | **15.0kt** | **20.0kt** | **F4** | **ESE  ** | **1.8kt** | **⚠ -13.2** | **0%** | **0.0mm** |
+| 15:00  | 16.3°C  | 254° WSW   | 5.2kt | 19.5kt | F2 | SSW   | 4.7kt | -0.5 | 0% | 0.0mm |
+| 18:00  | 14.4°C  | 216° SW    | 9.1kt | 18.9kt | F3 | WSW   | 3.1kt | ⚠ -6.0 | 0% | 0.0mm |
+| 21:00  | 12.1°C  | 360° N     | 4.9kt | 13.0kt | F2 | WNW   | 2.5kt | -2.4 | 0% | 0.0mm |
 
-**Wind summary**: Peak 9.5kt from 171° S at 12:00, gusting 21.1kt (F3). Direction: NE → S → NNE → SSW → W. Max model spread: **7.9kt** (ICON-EU vs GFS — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **10.1°C** (min) → **16.3°C** (max).
+**Wind summary**: Peak 15.0kt from 180° S at 12:00, gusting 20.0kt (F4). Direction: SSE → S → WSW → SW → N. Max model spread: **13.2kt** (ICON-EU vs ECMWF — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **10.1°C** (min) → **16.3°C** (max).
 
 ---
 
@@ -73,4 +73,4 @@ Tidal range: 2.49m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Stormglass.io | Tidal extremes | `api.stormglass.io/v2/tide/extremes/point` |
 
-*Generated: 2026-03-01T10:07:10.638Z UTC*
+*Generated: 2026-03-01T10:19:56.017Z UTC*
