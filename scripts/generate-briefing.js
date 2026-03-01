@@ -350,23 +350,16 @@ function buildTidalSection(tidesData) {
   function passageNote(stream, leg) {
     if (!stream) return '—';
     const { phase, rateLabel, prev, next } = stream;
-    const outFav  = phase === 'ebb';   // ebb helps outbound
-    const inFav   = phase === 'flood'; // flood helps inbound
-    const slack   = rateLabel === 'slack';
-
-    if (slack) return `Near-slack (${prev.timeStr}→${next.timeStr}) — negligible effect`;
-
+    if (rateLabel === 'slack') return `Near-slack (${prev.timeStr}→${next.timeStr} UTC) — minimal current`;
     if (leg === 'dep') {
-      // Outbound Lisbon → direction depends on stream
-      const dir = outFav ? 'Cascais (seaward)' : 'upriver';
-      return outFav
-        ? `${rateLabel} ebb — favorable seaward (Cascais)`
-        : `${rateLabel} flood — favorable upriver; adverse for Cascais`;
+      // Direction is set by the RETURN stream (retPhase), not the departure stream
+      const dir = retPhase === 'ebb' ? 'upriver' : 'seaward (Cascais)';
+      return `${rateLabel} ${phase} — depart ${dir}`;
     }
     if (leg === 'ret') {
-      return inFav
-        ? `${rateLabel} flood — favorable return to Lisbon`
-        : `${rateLabel} ebb — adverse for return; plan for extra time`;
+      // Return stream brings you home
+      const homeDir = phase === 'ebb' ? 'seaward back to base ✓' : 'inward back to base ✓';
+      return `${rateLabel} ${phase} — ${homeDir}`;
     }
     return '—';
   }
@@ -387,15 +380,31 @@ function buildTidalSection(tidesData) {
     ...slackRows,
   );
 
-  // Overall recommendation
-  const depPhase = dep?.phase;
+  // Direction logic:
+  // The return stream at 17h determines where you sailed to:
+  //   ebb at 17h  → water flows seaward → you return seaward → you departed UPRIVER
+  //   flood at 17h → water flows inward  → you return inward  → you departed SEAWARD (Cascais)
   const retPhase = ret?.phase;
-  const bothAdverse = depPhase === 'flood' && retPhase === 'ebb';
-  const rec = bothAdverse
-    ? `⚠ Both legs adverse today — depart at HW slack (${events.find(e => e.type === 'high')?.timeStr ?? '—'} UTC) to minimise adverse stream.`
-    : depPhase === 'ebb'
-      ? `✓ Depart ${CONFIG.depHour}:00 on ${dep.rateLabel} ebb — seaward/Cascais favoured. Return ${CONFIG.retHour}:00 on ${ret?.rateLabel ?? '—'} ${ret?.phase ?? '—'}${ret?.phase === 'flood' ? ' — Lisbon return favoured' : ' — allow extra time against ebb'}.`
-      : `✓ Depart ${CONFIG.depHour}:00 on ${dep?.rateLabel ?? '—'} flood — upriver favoured. Return ${CONFIG.retHour}:00 on ${ret?.rateLabel ?? '—'} ${ret?.phase ?? '—'}${ret?.phase === 'ebb' ? ' — seaward return favoured' : ' — allow extra time against flood'}.`;
+  const depDir   = retPhase === 'ebb'   ? 'upriver'          : 'seaward (Cascais)';
+  const retDir   = retPhase === 'ebb'   ? 'seaward (back to base)' : 'upriver (back to base)';
+
+  // Nearest HW/LW to departure — ideal slack window
+  const nearestSlack = events.reduce((best, e) =>
+    Math.abs(e.localHour - CONFIG.depHour) < Math.abs(best.localHour - CONFIG.depHour) ? e : best
+  );
+  const slackGapMins = Math.round(Math.abs(nearestSlack.localHour - CONFIG.depHour) * 60);
+  const slackNote = slackGapMins <= 30
+    ? `near-slack (${nearestSlack.type.toUpperCase()} at ${nearestSlack.timeStr} UTC — minimal adverse current on departure)`
+    : `${dep?.rateLabel ?? '—'} ${dep?.phase ?? '—'} at departure (${nearestSlack.type.toUpperCase()} slack ${slackGapMins} min away at ${nearestSlack.timeStr} UTC)`;
+
+  const retNote = ret
+    ? `${ret.rateLabel} ${ret.phase} at ${CONFIG.retHour}:00 — ${ret.phase === retPhase ? `✓ ${retDir}` : '—'}`
+    : '—';
+
+  const rec = ret
+    ? `Depart ${CONFIG.depHour}:00 → **${depDir}** (${slackNote}). ` +
+      `Return ${CONFIG.retHour}:00 on **${ret.rateLabel} ${ret.phase}** — ✓ ${retDir}.`
+    : `⚠ Insufficient tidal data to compute passage window.`;
 
   lines.push(``, `> **Passage window**: ${rec}`);
 
