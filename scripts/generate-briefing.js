@@ -103,6 +103,21 @@ async function fetchOpenMeteo() {
   return res.json();
 }
 
+async function fetchEcmwf() {
+  const params = new URLSearchParams({
+    latitude:        CONFIG.lat,
+    longitude:       CONFIG.lon,
+    hourly:          'wind_speed_10m,wind_direction_10m',
+    wind_speed_unit: 'kn',
+    timezone:        CONFIG.timezone,
+    models:          'ecmwf_ifs025',
+    forecast_days:   2,
+  });
+  const res = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+  if (!res.ok) throw new Error(`Open-Meteo ECMWF HTTP ${res.status}`);
+  return res.json();
+}
+
 async function fetchTides() {
   if (!CONFIG.stormglassKey) return null;
   const today    = new Date();
@@ -117,15 +132,15 @@ async function fetchTides() {
 
 // ─── Section: TODAY — HOURLY FORECAST ────────────────────────────────────────
 
-function buildHourlyTable(windyIconEu, windyGfs, om) {
-  const isTestKey = windyIconEu?.warning?.includes('shuffled');
-  const hasWindy  = windyIconEu?.ts?.length > 0;
-  const hasGfs    = windyGfs?.ts?.length > 0;
+function buildHourlyTable(windyIconEu, ecmwf, om) {
+  const isTestKey  = windyIconEu?.warning?.includes('shuffled');
+  const hasWindy   = windyIconEu?.ts?.length > 0;
+  const hasEcmwf   = ecmwf?.hourly?.time?.length > 0;
 
   const windyNote = hasWindy
     ? (isTestKey
         ? 'ICON-EU: **Windy API** (3-hourly, ⚠ test key — values shuffled, not reliable)'
-        : 'ICON-EU: **Windy API** (3-hourly ✓) · GFS cross-check enabled')
+        : 'ICON-EU: **Windy API** (3-hourly ✓) · ECMWF cross-check: **Open-Meteo** (free)')
     : 'Wind: **Open-Meteo** (Windy key not configured)';
 
   // Build Open-Meteo lookup keyed by local datetime string (YYYY-MM-DDTHH:MM)
@@ -141,15 +156,13 @@ function buildHourlyTable(windyIconEu, windyGfs, om) {
     };
   });
 
-  // Build GFS lookup keyed by local datetime string
-  const gfsByTime = {};
-  if (hasGfs) {
-    windyGfs.ts.forEach((ts, i) => {
-      const localStr = new Date(ts).toLocaleString('sv-SE', { timeZone: CONFIG.timezone })
-                                   .replace(' ', 'T').slice(0, 16);
-      gfsByTime[localStr] = {
-        spd: spdKt(windyGfs['wind_u-surface'][i], windyGfs['wind_v-surface'][i]),
-        dir: dirDeg(windyGfs['wind_u-surface'][i], windyGfs['wind_v-surface'][i]),
+  // Build ECMWF lookup keyed by local datetime string (already in knots from Open-Meteo)
+  const ecmwfByTime = {};
+  if (hasEcmwf) {
+    ecmwf.hourly.time.forEach((t, i) => {
+      ecmwfByTime[t] = {
+        spd: ecmwf.hourly.wind_speed_10m[i],
+        dir: ecmwf.hourly.wind_direction_10m[i],
       };
     });
   }
@@ -163,11 +176,11 @@ function buildHourlyTable(windyIconEu, windyGfs, om) {
                                    .replace(' ', 'T').slice(0, 16);
       if (localStr.slice(0, 10) !== todayStr) return;
 
-      const spd  = spdKt(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
-      const dir  = dirDeg(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
-      const gust = windyIconEu['gust-surface'][i] * 1.94384;
-      const om3  = omByTime[localStr] || {};
-      const gfs3 = gfsByTime[localStr] || null;
+      const spd   = spdKt(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
+      const dir   = dirDeg(windyIconEu['wind_u-surface'][i], windyIconEu['wind_v-surface'][i]);
+      const gust  = windyIconEu['gust-surface'][i] * 1.94384;
+      const om3   = omByTime[localStr]   || {};
+      const ecm3  = ecmwfByTime[localStr] || null;
 
       rows.push({
         time: localStr.slice(11, 16),
@@ -175,10 +188,10 @@ function buildHourlyTable(windyIconEu, windyGfs, om) {
         pp:   om3.pp   ?? null,
         rain: om3.rain ?? null,
         spd, dir, gust,
-        bf:   beaufort(spd),
-        dl:   dirLabel(dir),
-        gfsSpd: gfs3?.spd ?? null,
-        gfsDl:  gfs3 ? dirLabel(gfs3.dir) : null,
+        bf:      beaufort(spd),
+        dl:      dirLabel(dir),
+        ecmwfSpd: ecm3?.spd ?? null,
+        ecmwfDl:  ecm3 ? dirLabel(ecm3.dir) : null,
       });
     });
   } else {
@@ -193,10 +206,10 @@ function buildHourlyTable(windyIconEu, windyGfs, om) {
         rain: om.hourly.rain[i],
         spd, dir,
         gust: om.hourly.wind_gusts_10m[i],
-        bf:   beaufort(spd),
-        dl:   dirLabel(dir),
-        gfsSpd: null,
-        gfsDl:  null,
+        bf:      beaufort(spd),
+        dl:      dirLabel(dir),
+        ecmwfSpd: null,
+        ecmwfDl:  null,
       });
     });
   }
@@ -218,34 +231,34 @@ function buildHourlyTable(windyIconEu, windyGfs, om) {
     `## TODAY — HOURLY FORECAST`,
     ``,
     `> ${windyNote} · Temp / Precip / Rain: **Open-Meteo** (live)`,
-    `> Δkt = GFS minus ICON-EU — divergence ⚠ >5kt signals low forecast confidence.`,
+    `> Δkt = ECMWF minus ICON-EU — divergence ⚠ >5kt signals low forecast confidence.`,
     ``,
-    `| Time  | Temp    | ICON-EU Dir     | ICON (kt) | Gust (kt) | BFT  | GFS Dir  | GFS (kt) | Δkt   | Precip % | Rain (mm) |`,
-    `|-------|---------|-----------------|-----------|-----------|------|----------|----------|-------|----------|-----------|`,
+    `| Time  | Temp    | ICON-EU Dir     | ICON (kt) | Gust (kt) | BFT  | ECMWF Dir | ECMWF (kt) | Δkt   | Precip % | Rain (mm) |`,
+    `|-------|---------|-----------------|-----------|-----------|------|-----------|------------|-------|----------|-----------|`,
   ];
 
   const tableRows = rows.map((r, i) => {
     const p = i === peakIdx;
     const b = s => p ? `**${s}**` : s;
-    return `| ${b(r.time)}  | ${b(fv(r.temp, '°C'))}  | ${b(String(Math.round(r.dir)).padStart(3) + '° ' + r.dl.padEnd(5))} | ${b(fv(r.spd, 'kt'))} | ${b(fv(r.gust, 'kt'))} | ${b('F' + r.bf)} | ${b(r.gfsDl ? r.gfsDl.padEnd(5) : '—')} | ${b(fv(r.gfsSpd, 'kt'))} | ${b(fDelta(r.spd, r.gfsSpd))} | ${b(r.pp != null ? r.pp + '%' : '—')} | ${b(fv(r.rain, 'mm'))} |`;
+    return `| ${b(r.time)}  | ${b(fv(r.temp, '°C'))}  | ${b(String(Math.round(r.dir)).padStart(3) + '° ' + r.dl.padEnd(5))} | ${b(fv(r.spd, 'kt'))} | ${b(fv(r.gust, 'kt'))} | ${b('F' + r.bf)} | ${b(r.ecmwfDl ? r.ecmwfDl.padEnd(5) : '—')} | ${b(fv(r.ecmwfSpd, 'kt'))} | ${b(fDelta(r.spd, r.ecmwfSpd))} | ${b(r.pp != null ? r.pp + '%' : '—')} | ${b(fv(r.rain, 'mm'))} |`;
   });
 
-  const peak    = rows[peakIdx];
-  const temps   = rows.map(r => r.temp).filter(t => t != null);
-  const minTemp = temps.length ? Math.min(...temps).toFixed(1) : '—';
-  const maxTemp = temps.length ? Math.max(...temps).toFixed(1) : '—';
-  const totalR  = rows.reduce((s, r) => s + (r.rain ?? 0), 0).toFixed(1);
-  const dirEvo  = [...new Set(rows.map(r => r.dl))].join(' → ');
+  const peak     = rows[peakIdx];
+  const temps    = rows.map(r => r.temp).filter(t => t != null);
+  const minTemp  = temps.length ? Math.min(...temps).toFixed(1) : '—';
+  const maxTemp  = temps.length ? Math.max(...temps).toFixed(1) : '—';
+  const totalR   = rows.reduce((s, r) => s + (r.rain ?? 0), 0).toFixed(1);
+  const dirEvo   = [...new Set(rows.map(r => r.dl))].join(' → ');
   const maxDelta = rows
-    .filter(r => r.gfsSpd != null)
-    .reduce((m, r) => Math.max(m, Math.abs(r.gfsSpd - r.spd)), 0);
+    .filter(r => r.ecmwfSpd != null)
+    .reduce((m, r) => Math.max(m, Math.abs(r.ecmwfSpd - r.spd)), 0);
 
   const summary = [
     ``,
     `**Wind summary**: Peak ${fv(peak.spd, 'kt')} from ${Math.round(peak.dir)}° ${peak.dl} ` +
     `at ${peak.time}, gusting ${fv(peak.gust, 'kt')} (F${peak.bf}). ` +
     `Direction: ${dirEvo}. ` +
-    (hasGfs ? `Max model spread: **${maxDelta.toFixed(1)}kt** (ICON-EU vs GFS${maxDelta > 5 ? ' — ⚠ low confidence' : ' — models agree'})${maxDelta > 5 ? ', plan for the stronger figure' : ''}. ` : '') +
+    (hasEcmwf ? `Max model spread: **${maxDelta.toFixed(1)}kt** (ICON-EU vs ECMWF${maxDelta > 5 ? ' — ⚠ low confidence' : ' — models agree'})${maxDelta > 5 ? ', plan for the stronger figure' : ''}. ` : '') +
     (parseFloat(totalR) > 0 ? `Total rain: ${totalR}mm. ` : `Zero precipitation. `) +
     `Temperature: **${minTemp}°C** (min) → **${maxTemp}°C** (max).`,
   ];
@@ -599,21 +612,21 @@ async function main() {
   console.log(`\n⚓ Generating maritime briefing for ${today}...\n`);
 
   // Fetch all data in parallel — individual failures are non-fatal
-  const [iconEu, gfs, , openMeteo, tides] = await Promise.all([
+  const [iconEu, ecmwf, , openMeteo, tides] = await Promise.all([
     fetchWindy('iconEu',  ['wind', 'windGust', 'pressure', 'temp']).catch(e => { console.warn('  ✗ Windy iconEu:', e.message);  return null; }),
-    fetchWindy('gfs',     ['wind', 'windGust']).catch(e =>                      { console.warn('  ✗ Windy GFS:', e.message);     return null; }),
+    fetchEcmwf().catch(e =>                                                      { console.warn('  ✗ ECMWF:', e.message);         return null; }),
     fetchWindy('gfsWave', ['waves', 'swell1', 'swell2']).catch(e =>             { console.warn('  ✗ Windy gfsWave:', e.message); return null; }),
     fetchOpenMeteo().catch(e =>                                                  { throw new Error('Open-Meteo failed: ' + e.message); }),
     fetchTides().catch(e =>                                                      { console.warn('  ✗ Stormglass:', e.message);    return null; }),
   ]);
 
   console.log(`  ✓ Open-Meteo   — ${openMeteo.hourly.time.length} hourly steps`);
-  if (iconEu)  console.log(`  ✓ Windy iconEu — ${iconEu.ts.length} steps${iconEu.warning ? ' ⚠ test key' : ''}`);
-  if (gfs)     console.log(`  ✓ Windy GFS    — ${gfs.ts.length} steps${gfs.warning ? ' ⚠ test key' : ''}`);
-  if (tides)   console.log(`  ✓ Stormglass   — ${tides.data?.length} tidal extremes`);
+  if (iconEu) console.log(`  ✓ Windy iconEu — ${iconEu.ts.length} steps${iconEu.warning ? ' ⚠ test key' : ''}`);
+  if (ecmwf)  console.log(`  ✓ ECMWF IFS    — ${ecmwf.hourly.time.length} hourly steps (Open-Meteo)`);
+  if (tides)  console.log(`  ✓ Stormglass   — ${tides.data?.length} tidal extremes`);
 
   // Build the three automated sections
-  const hourlyMd = buildHourlyTable(iconEu, gfs, openMeteo);
+  const hourlyMd = buildHourlyTable(iconEu, ecmwf, openMeteo);
   const tidalMd  = buildTidalSection(tides);
   const multiMd  = buildMultiDayTable(openMeteo);
 
