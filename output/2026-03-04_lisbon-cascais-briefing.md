@@ -36,18 +36,18 @@
 | 22:00  | 14.2°C  | 334° NNW   | 11.0kt | 22.5kt | F4 | 0% | 0.0mm |
 | 23:00  | 13.5°C  | 332° NNW   | 11.0kt | 22.7kt | F4 | 0% | 0.0mm |
 
-**Wind summary**: Peak 11.0kt from 335° NNW at 21:00, gusting 22.2kt (F4). Direction: NNE → NE → N → NNW. Max model spread: **8.4kt** (ECMWF vs ICON-EU — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
+**Wind summary**: Peak 11.0kt from 335° NNW at 21:00, gusting 22.2kt (F4). Direction: NNE → NE → N → NNW. Max model spread: **7.7kt** (ECMWF vs ICON-EU — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
 
 ### ICON-EU Cross-Check (Windy API — 3-hourly, ⚠ test key)
 
 | Time  | ICON-EU Dir     | ICON-EU (kt) | Δkt (ECMWF−ICON) |
 |-------|-----------------|--------------|------------------|
-| 06:00  | 131° SE    | 8.7kt | -1.1 |
-| 09:00  | 198° SSW   | 15.9kt | ⚠ -8.4 |
-| 12:00  | 199° SSW   | 6.0kt | +2.0 |
-| 15:00  |  61° ENE   | 4.7kt | +2.5 |
-| 18:00  | 223° SW    | 8.8kt | +1.0 |
-| **21:00**  | **142° SE   ** | **9.8kt** | **+1.2** |
+| 06:00  | 156° SSE   | 10.2kt | -2.6 |
+| 09:00  | 172° S     | 15.2kt | ⚠ -7.7 |
+| 12:00  | 110° ESE   | 6.5kt | +1.5 |
+| 15:00  | 130° SE    | 6.2kt | +1.0 |
+| 18:00  | 157° SSE   | 6.2kt | +3.6 |
+| **21:00**  | **169° S    ** | **15.0kt** | **-4.0** |
 
 ---
 
@@ -103,4 +103,4 @@ Tidal range: 3.40m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Porto de Lisboa PDF | Tidal extremes | `data/tides-2026.json` (pre-parsed) |
 
-*Generated: 2026-03-04T08:22:51.064Z UTC*
+*Generated: 2026-03-04T08:48:09.852Z UTC*
