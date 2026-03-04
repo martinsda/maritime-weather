@@ -705,12 +705,9 @@ function buildEmailHtml(date, hourlyMd, tidalMd, multiMd) {
     const rows  = [];
     let collecting = false;
     for (const l of lines) {
-      if (l.startsWith('|') && !l.match(/^\|[-| :]+\|$/)) {
-        collecting = true;
-        rows.push(l);
-      } else if (collecting) {
-        break; // stop at first non-table line after table started
-      }
+      if (l.match(/^\|[-| :]+\|$/)) continue;          // skip separator rows
+      if (l.startsWith('|')) { collecting = true; rows.push(l); }
+      else if (collecting)   { break; }                // stop after first table
     }
     if (!rows.length) return '';
     const [head, ...body] = rows;
