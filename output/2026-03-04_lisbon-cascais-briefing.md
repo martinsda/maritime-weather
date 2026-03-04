@@ -7,47 +7,35 @@
 ---
 
 ## TODAY — HOURLY FORECAST
-> Wind: **ECMWF IFS** via Open-Meteo · ICON-EU: Windy API (3-hourly, ⚠ test key — values shuffled) · Temp / Precip / Rain: **Open-Meteo** (live)
-> Δkt (ECMWF − ICON-EU) shown in auxiliary table below. Divergence ⚠ >5 kt = low forecast confidence.
+> Wind: **ECMWF IFS** via Open-Meteo (hourly ✓) · Temp / Precip / Rain: **Open-Meteo** (live)
 | Time  | Temp    | ECMWF IFS Dir   | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) |
 |-------|---------|---------------------|-----------|------------|------|----------|-----------|
-| 00:00  | 15.5°C  |  17° NNE   | 6.7kt | 14.0kt | F2 | 0% | 0.0mm |
-| 01:00  | 15.3°C  |  21° NNE   | 6.6kt | 13.8kt | F2 | 0% | 0.0mm |
-| 02:00  | 14.9°C  |  25° NNE   | 6.9kt | 13.8kt | F2 | 0% | 0.0mm |
-| 03:00  | 14.8°C  |  29° NNE   | 7.1kt | 14.0kt | F3 | 0% | 0.0mm |
-| 04:00  | 14.4°C  |  32° NNE   | 7.1kt | 14.2kt | F3 | 0% | 0.0mm |
-| 05:00  | 14.2°C  |  33° NNE   | 7.2kt | 14.4kt | F3 | 0% | 0.0mm |
-| 06:00  | 14.0°C  |  35° NE    | 7.1kt | 14.6kt | F3 | 0% | 0.0mm |
-| 07:00  | 13.7°C  |  37° NE    | 7.1kt | 15.0kt | F3 | 0% | 0.0mm |
-| 08:00  | 13.7°C  |  40° NE    | 6.9kt | 15.2kt | F2 | 0% | 0.0mm |
-| 09:00  | 14.6°C  |  44° NE    | 7.0kt | 15.9kt | F3 | 0% | 0.0mm |
-| 10:00  | 15.4°C  |  47° NE    | 7.4kt | 17.3kt | F3 | 0% | 0.0mm |
-| 11:00  | 16.7°C  |  49° NE    | 8.0kt | 18.9kt | F3 | 0% | 0.0mm |
-| 12:00  | 18.1°C  |  48° NE    | 8.1kt | 20.0kt | F3 | 0% | 0.0mm |
-| 13:00  | 19.4°C  |  39° NE    | 7.7kt | 20.2kt | F3 | 0% | 0.0mm |
-| 14:00  | 20.2°C  |  25° NNE   | 7.3kt | 20.2kt | F3 | 0% | 0.0mm |
-| 15:00  | 20.8°C  |   9° N     | 7.3kt | 20.0kt | F3 | 0% | 0.0mm |
-| 16:00  | 20.8°C  | 354° N     | 7.6kt | 20.0kt | F3 | 0% | 0.0mm |
-| 17:00  | 19.3°C  | 339° NNW   | 8.3kt | 20.2kt | F3 | 0% | 0.0mm |
-| 18:00  | 17.6°C  | 332° NNW   | 9.2kt | 20.6kt | F3 | 0% | 0.0mm |
-| 19:00  | 16.1°C  | 332° NNW   | 9.9kt | 21.4kt | F3 | 0% | 0.0mm |
-| 20:00  | 15.2°C  | 335° NNW   | 10.5kt | 22.4kt | F3 | 0% | 0.0mm |
-| 21:00  | 14.8°C  | 337° NNW   | 10.8kt | 23.1kt | F3 | 0% | 0.0mm |
-| **22:00**  | **14.2°C**  | **336° NNW  ** | **11.1kt** | **23.3kt** | **F4** | **0%** | **0.0mm** |
-| 23:00  | 13.5°C  | 334° NNW   | 11.0kt | 22.9kt | F4 | 0% | 0.0mm |
+| 00:00  | 15.5°C  |  18° NNE   | 7.7kt | 14.0kt | F3 | 0% | 0.0mm |
+| 01:00  | 15.3°C  |  22° NNE   | 7.8kt | 14.2kt | F3 | 0% | 0.0mm |
+| 02:00  | 14.9°C  |  27° NNE   | 7.7kt | 14.8kt | F3 | 0% | 0.0mm |
+| 03:00  | 14.8°C  |  30° NNE   | 7.7kt | 15.2kt | F3 | 0% | 0.0mm |
+| 04:00  | 14.4°C  |  29° NNE   | 7.6kt | 15.2kt | F3 | 0% | 0.0mm |
+| 05:00  | 14.2°C  |  27° NNE   | 7.7kt | 15.2kt | F3 | 0% | 0.0mm |
+| 06:00  | 14.0°C  |  26° NNE   | 7.6kt | 15.2kt | F3 | 0% | 0.0mm |
+| 07:00  | 13.7°C  |  29° NNE   | 7.6kt | 15.4kt | F3 | 0% | 0.0mm |
+| 08:00  | 13.7°C  |  35° NE    | 7.5kt | 15.7kt | F3 | 0% | 0.0mm |
+| 09:00  | 14.6°C  |  39° NE    | 7.5kt | 16.3kt | F3 | 0% | 0.0mm |
+| 10:00  | 15.4°C  |  43° NE    | 7.7kt | 17.9kt | F3 | 0% | 0.0mm |
+| 11:00  | 16.7°C  |  45° NE    | 8.0kt | 19.6kt | F3 | 0% | 0.0mm |
+| 12:00  | 18.1°C  |  43° NE    | 8.0kt | 20.8kt | F3 | 0% | 0.0mm |
+| 13:00  | 19.4°C  |  35° NE    | 7.5kt | 20.6kt | F3 | 0% | 0.0mm |
+| 14:00  | 20.2°C  |  19° NNE   | 7.0kt | 19.8kt | F3 | 0% | 0.0mm |
+| 15:00  | 20.8°C  |   5° N     | 7.2kt | 19.4kt | F3 | 0% | 0.0mm |
+| 16:00  | 20.8°C  | 351° N     | 7.9kt | 19.6kt | F3 | 0% | 0.0mm |
+| 17:00  | 19.3°C  | 342° NNW   | 8.8kt | 20.0kt | F3 | 0% | 0.0mm |
+| 18:00  | 17.6°C  | 337° NNW   | 9.8kt | 20.6kt | F3 | 0% | 0.0mm |
+| 19:00  | 16.1°C  | 334° NNW   | 10.3kt | 21.2kt | F3 | 0% | 0.0mm |
+| 20:00  | 15.2°C  | 335° NNW   | 10.7kt | 21.8kt | F3 | 0% | 0.0mm |
+| **21:00**  | **14.8°C**  | **335° NNW  ** | **11.0kt** | **22.2kt** | **F4** | **0%** | **0.0mm** |
+| 22:00  | 14.2°C  | 334° NNW   | 11.0kt | 22.5kt | F4 | 0% | 0.0mm |
+| 23:00  | 13.5°C  | 332° NNW   | 11.0kt | 22.7kt | F4 | 0% | 0.0mm |
 
-**Wind summary**: Peak 11.1kt from 336° NNW at 22:00, gusting 23.3kt (F4). Direction: NNE → NE → N → NNW. Max model spread: **6.2kt** (ECMWF vs ICON-EU — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
-
-### ICON-EU Cross-Check (Windy API — 3-hourly, ⚠ test key)
-
-| Time  | ICON-EU Dir     | ICON-EU (kt) | Δkt (ECMWF−ICON) |
-|-------|-----------------|--------------|------------------|
-| 06:00  | 158° SSE   | 6.4kt | +0.7 |
-| 09:00  | 232° SW    | 5.6kt | +1.4 |
-| 12:00  | 107° ESE   | 1.9kt | ⚠ +6.2 |
-| 15:00  | 114° ESE   | 5.4kt | +1.9 |
-| 18:00  | 160° SSE   | 6.0kt | +3.2 |
-| 21:00  | 138° SE    | 9.1kt | +1.7 |
+**Wind summary**: Peak 11.0kt from 335° NNW at 21:00, gusting 22.2kt (F4). Direction: NNE → NE → N → NNW. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
 
 ---
 
@@ -59,30 +47,22 @@
 
 ```
 HW1: 03:42 UTC — 3.90m (ZH)
+LW1: 09:38 UTC — 0.50m (ZH)
 HW2: 16:01 UTC — 3.70m (ZH)
-HW3: 04:16 UTC — 3.80m (ZH)
-HW4: 16:33 UTC — 3.60m (ZH)
-LW:  09:38 UTC — 0.50m (ZH)
-LW:  21:46 UTC — 0.60m (ZH)
-LW:  10:10 UTC — 0.60m (ZH)
-LW:  22:19 UTC — 0.60m (ZH)
+LW2: 21:46 UTC — 0.60m (ZH)
 Tidal range: 3.40m
 ```
 
 | Time (UTC)    | Stream at departure/return    | Passage note                                     |
 |---------------|-------------------------------|--------------------------------------------------|
 | 14:00 (dep)  | strong flood                  | strong flood — depart upriver |
-| 17:00 (ret)  | slack ebb                     | Near-slack (16:33→21:46 UTC) — minimal current |
+| 17:00 (ret)  | moderate ebb                  | moderate ebb — seaward back to base ✓ |
 | 03:42 UTC | HW slack (3.90m ZH) | Calmest bar crossing window |
-| 04:16 UTC | HW slack (3.80m ZH) | Calmest bar crossing window |
 | 09:38 UTC | LW slack (0.50m ZH) | Calmest bar crossing window |
-| 10:10 UTC | LW slack (0.60m ZH) | Calmest bar crossing window |
 | 16:01 UTC | HW slack (3.70m ZH) | Calmest bar crossing window |
-| 16:33 UTC | HW slack (3.60m ZH) | Calmest bar crossing window |
 | 21:46 UTC | LW slack (0.60m ZH) | Calmest bar crossing window |
-| 22:19 UTC | LW slack (0.60m ZH) | Calmest bar crossing window |
 
-> **Passage window**: Depart 14:00 → **upriver** (strong flood at departure (HIGH slack 121 min away at 16:01 UTC)). Return 17:00 on **slack ebb** — ✓ seaward (back to base).
+> **Passage window**: Depart 14:00 → **upriver** (strong flood at departure (HIGH slack 121 min away at 16:01 UTC)). Return 17:00 on **moderate ebb** — ✓ seaward (back to base).
 
 ---
 
@@ -111,4 +91,4 @@ Tidal range: 3.40m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Porto de Lisboa PDF | Tidal extremes | `data/tides-2026.json` (pre-parsed) |
 
-*Generated: 2026-03-04T08:07:05.330Z UTC*
+*Generated: 2026-03-04T08:17:41.752Z UTC*

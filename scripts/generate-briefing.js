@@ -119,12 +119,10 @@ async function fetchEcmwf() {
   return res.json();
 }
 
-// Load today+tomorrow tides from the pre-parsed Porto de Lisboa JSON.
+// Load today's tides from the pre-parsed Porto de Lisboa JSON.
 // Heights in the JSON are ZH metres — stored and displayed as-is.
 function loadLocalTides() {
   const today = new Date().toISOString().slice(0, 10);
-  const tom   = new Date(); tom.setUTCDate(tom.getUTCDate() + 1);
-  const tomorrowStr = tom.toISOString().slice(0, 10);
   const year  = new Date().getUTCFullYear();
 
   let allTides;
@@ -134,13 +132,12 @@ function loadLocalTides() {
   } catch { return null; }
 
   const data = [];
-  for (const dateStr of [today, tomorrowStr]) {
-    const entry = allTides[dateStr];
-    if (!entry) continue;
+  const entry = allTides[today];
+  if (entry) {
     for (const [key, type] of [['HW1','high'],['LW1','low'],['HW2','high'],['LW2','low']]) {
       const ev = entry[key];
       if (!ev?.time) continue;
-      data.push({ time: `${dateStr}T${ev.time}:00Z`, type, height: ev.height });
+      data.push({ time: `${today}T${ev.time}:00Z`, type, height: ev.height });
     }
   }
   return data.length ? { data } : null;
@@ -403,9 +400,12 @@ function buildTidalSection(tidesData) {
     ``,
   );
 
+  let hwN = 0, lwN = 0;
   lines.push('```');
-  highs.forEach((h, i) => lines.push(`HW${i + 1}: ${fmt(h.time)} UTC — ${zh(h.height)}m (ZH)`));
-  lows.forEach(l  => lines.push(`LW:  ${fmt(l.time)} UTC — ${zh(l.height)}m (ZH)`));
+  tides.forEach(t => {
+    if (t.type === 'high') { hwN++; lines.push(`HW${hwN}: ${fmt(t.time)} UTC — ${zh(t.height)}m (ZH)`); }
+    else                   { lwN++; lines.push(`LW${lwN}: ${fmt(t.time)} UTC — ${zh(t.height)}m (ZH)`); }
+  });
 
   if (highs.length && lows.length) {
     const range = Math.abs(highs[0].height - lows[0].height).toFixed(2);
