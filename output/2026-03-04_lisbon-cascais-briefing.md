@@ -7,7 +7,8 @@
 ---
 
 ## TODAY — HOURLY FORECAST
-> Wind: **ECMWF IFS** via Open-Meteo (hourly ✓) · Temp / Precip / Rain: **Open-Meteo** (live)
+> Wind: **ECMWF IFS** via Open-Meteo · ICON-EU: Windy API (3-hourly, ⚠ test key — values shuffled) · Temp / Precip / Rain: **Open-Meteo** (live)
+> Δkt (ECMWF − ICON-EU) shown in auxiliary table below. Divergence ⚠ >5 kt = low forecast confidence.
 | Time  | Temp    | ECMWF IFS Dir   | Wind (kt) | Gust (kt) | BFT  | Precip % | Rain (mm) |
 |-------|---------|---------------------|-----------|------------|------|----------|-----------|
 | 00:00  | 15.5°C  |  17° NNE   | 6.7kt | 14.0kt | F2 | 0% | 0.0mm |
@@ -35,7 +36,18 @@
 | **22:00**  | **14.2°C**  | **336° NNW  ** | **11.1kt** | **23.3kt** | **F4** | **0%** | **0.0mm** |
 | 23:00  | 13.5°C  | 334° NNW   | 11.0kt | 22.9kt | F4 | 0% | 0.0mm |
 
-**Wind summary**: Peak 11.1kt from 336° NNW at 22:00, gusting 23.3kt (F4). Direction: NNE → NE → N → NNW. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
+**Wind summary**: Peak 11.1kt from 336° NNW at 22:00, gusting 23.3kt (F4). Direction: NNE → NE → N → NNW. Max model spread: **6.2kt** (ECMWF vs ICON-EU — ⚠ low confidence), plan for the stronger figure. Zero precipitation. Temperature: **13.5°C** (min) → **20.8°C** (max).
+
+### ICON-EU Cross-Check (Windy API — 3-hourly, ⚠ test key)
+
+| Time  | ICON-EU Dir     | ICON-EU (kt) | Δkt (ECMWF−ICON) |
+|-------|-----------------|--------------|------------------|
+| 06:00  | 158° SSE   | 6.4kt | +0.7 |
+| 09:00  | 232° SW    | 5.6kt | +1.4 |
+| 12:00  | 107° ESE   | 1.9kt | ⚠ +6.2 |
+| 15:00  | 114° ESE   | 5.4kt | +1.9 |
+| 18:00  | 160° SSE   | 6.0kt | +3.2 |
+| 21:00  | 138° SE    | 9.1kt | +1.7 |
 
 ---
 
@@ -99,4 +111,4 @@ Tidal range: 3.40m
 | Open-Meteo | Temp, rain, precip probability | `api.open-meteo.com/v1/forecast` |
 | Porto de Lisboa PDF | Tidal extremes | `data/tides-2026.json` (pre-parsed) |
 
-*Generated: 2026-03-04T08:04:22.748Z UTC*
+*Generated: 2026-03-04T08:07:05.330Z UTC*
