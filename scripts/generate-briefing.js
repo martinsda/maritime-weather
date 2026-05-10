@@ -159,7 +159,7 @@ function buildHourlyTable(windyIconEu, ecmwf, om) {
     omByTime[t] = {
       temp: om.hourly.temperature_2m[i],
       pp:   om.hourly.precipitation_probability[i],
-      rain: om.hourly.rain[i],
+      rain: om.hourly.precipitation[i],
       gust: om.hourly.wind_gusts_10m[i],
     };
   });
@@ -254,7 +254,7 @@ function buildHourlyTable(windyIconEu, ecmwf, om) {
         time:    t.slice(11, 16),
         temp:    om.hourly.temperature_2m[i],
         pp:      om.hourly.precipitation_probability[i],
-        rain:    om.hourly.rain[i],
+        rain:    om.hourly.precipitation[i],
         spd, dir,
         gust:    om.hourly.wind_gusts_10m[i],
         gustSrc: 'om',
