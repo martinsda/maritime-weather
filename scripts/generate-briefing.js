@@ -36,7 +36,7 @@ const CONFIG = {
   smtpPort:        parseInt(process.env.SMTP_PORT  || '587'),
   smtpUser:        process.env.SMTP_USER           || '',
   smtpPass:        process.env.SMTP_PASS           || '',
-  emailFrom:       process.env.EMAIL_FROM          || '',
+  emailFrom:       process.env.EMAIL_FROM          || 'onboarding@resend.dev',
   emailTo:         process.env.EMAIL_TO            || '',
 };
 
@@ -861,7 +861,7 @@ async function main() {
   console.log(`  ✓ Saved → index.html`);
 
   // Send email
-  if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailFrom && CONFIG.emailTo) {
+  if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailTo) {
     const emailHtml = buildEmailHtml(today, hourlyMd, tidalMd, multiMd);
     await sendEmail(today, emailHtml);
   } else {
