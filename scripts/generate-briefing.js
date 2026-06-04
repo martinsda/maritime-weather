@@ -36,6 +36,7 @@ const CONFIG = {
   smtpPort:        parseInt(process.env.SMTP_PORT  || '587'),
   smtpUser:        process.env.SMTP_USER           || '',
   smtpPass:        process.env.SMTP_PASS           || '',
+  emailFrom:       process.env.EMAIL_FROM          || '',
   emailTo:         process.env.EMAIL_TO            || '',
 };
 
@@ -774,7 +775,7 @@ async function sendEmail(date, html) {
   console.log('  SMTP connection verified ✓');
 
   const info = await transporter.sendMail({
-    from:    `"Maritime Briefing ⚓" <${CONFIG.smtpUser}>`,
+    from:    `"Maritime Briefing" <${CONFIG.emailFrom}>`,
     to:      CONFIG.emailTo,
     subject: `⚓ Maritime Briefing — ${date}`,
     html,
@@ -860,11 +861,11 @@ async function main() {
   console.log(`  ✓ Saved → index.html`);
 
   // Send email
-  if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailTo) {
+  if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailFrom && CONFIG.emailTo) {
     const emailHtml = buildEmailHtml(today, hourlyMd, tidalMd, multiMd);
     await sendEmail(today, emailHtml);
   } else {
-    console.log(`  ✗ Email skipped — SMTP_HOST / SMTP_USER / SMTP_PASS / EMAIL_TO not all set`);
+    console.log(`  ✗ Email skipped — SMTP_HOST / SMTP_USER / SMTP_PASS / EMAIL_FROM / EMAIL_TO not all set`);
   }
 
   console.log(`\n⚓ Done.\n`);
