@@ -860,8 +860,13 @@ async function main() {
   fs.writeFileSync(path.join(process.cwd(), 'index.html'), pageHtml, 'utf8');
   console.log(`  ✓ Saved → index.html`);
 
-  // Send email
-  if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailFrom && CONFIG.emailTo) {
+  // Send email via SMTP — skipped on Sundays, where the Cloudflare Worker generates
+  // and sends the briefing independently via Resend instead (more reliable delivery
+  // for the briefing day that matters most).
+  const isSunday = new Date().getUTCDay() === 0;
+  if (isSunday) {
+    console.log('  ↷ SMTP email skipped on Sundays — sent by the Cloudflare Worker (Resend) instead');
+  } else if (CONFIG.smtpHost && CONFIG.smtpUser && CONFIG.smtpPass && CONFIG.emailFrom && CONFIG.emailTo) {
     const emailHtml = buildEmailHtml(today, hourlyMd, tidalMd, multiMd);
     await sendEmail(today, emailHtml);
   } else {
